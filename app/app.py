@@ -5,7 +5,7 @@ from flask import render_template
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 mysql = MySQL(cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
@@ -18,7 +18,7 @@ mysql.init_app(app)
 
 @app.route('/', methods=['GET'])
 def index():
-    user = {'username': 'Tree Project'}
+    user = {'username': 'Andrew'}
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM trees')
     result = cursor.fetchall()
@@ -47,8 +47,8 @@ def form_update_post(tree_id):
     inputData = (request.form.get('fldName'), request.form.get('fldLat'), request.form.get('fldLong'),
                  request.form.get('fldCountry'), request.form.get('fldAbbreviation'),
                  request.form.get('fldCapitalStatus'), request.form.get('fldPopulation'), tree_id)
-    sql_update_query = """UPDATE trees t SET t.fldName = %s, t.fldLat = %s, t.fldLong = %s, t.fldCountry = 
-    %s, t.fldAbbreviation = %s, t.fldCapitalStatus = %s, t.fldPopulation = %s WHERE t.id = %s """
+    sql_update_query = """UPDATE trees t SET t.treeNum = %s, t.Girth_in = %s, t.Height_ft = %s, t.Volume_ft_3 = 
+    %s WHERE t.treeNum = %s """
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)

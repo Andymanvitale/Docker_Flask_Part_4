@@ -2,12 +2,12 @@ CREATE DATABASE treesData;
 use treesData;
 
 CREATE TABLE IF NOT EXISTS trees (
-    `Index` INT,
-    `Girth_in` NUMERIC(3, 1),
-    `Height_ft` INT,
-    `Volume_ft_3` NUMERIC(3, 1)
+    `treeNum` INT,
+    `girth` NUMERIC(3, 1),
+    `height` INT,
+    `volume` NUMERIC(3, 1)
 );
-INSERT INTO trees (Index, Girth_in, Height_ft, Volume_ft_3) VALUES
+INSERT INTO trees (`treeNum`, `girth`, `height`, `volume`) VALUES
     ( 1,   8.3,     70,   10.3),
     ( 2,   8.6,     65,   10.3),
     ( 3,   8.8,     63,   10.2),

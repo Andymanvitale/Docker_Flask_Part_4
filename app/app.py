@@ -36,7 +36,7 @@ def record_view(tree_id):
 @app.route('/edit/<int:tree_id>', methods=['GET'])
 def form_edit_get(tree_id):
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM treesData.trees WHERE id=%s', tree_id)
+    cursor.execute('SELECT * FROM trees WHERE id=%s', tree_id)
     result = cursor.fetchall()
     return render_template('edit.html', title='Edit Form', tree=result[0])
 

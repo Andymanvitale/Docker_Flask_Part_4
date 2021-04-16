@@ -2,10 +2,12 @@ CREATE DATABASE treesData;
 use treesData;
 
 CREATE TABLE IF NOT EXISTS trees (
+    `id` int AUTO_INCREMENT,
     `treeNum` INT,
     `girth` NUMERIC(3, 1),
     `height` INT,
-    `volume` NUMERIC(3, 1)
+    `volume` NUMERIC(3, 1),
+    PRIMARY KEY (`id`)
 );
 INSERT INTO trees (`treeNum`, `girth`, `height`, `volume`) VALUES
     ( 1,   8.3,     70,   10.3),

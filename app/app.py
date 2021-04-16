@@ -28,7 +28,7 @@ def index():
 @app.route('/view/<int:tree_id>', methods=['GET'])
 def record_view(tree_id):
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM treesData.trees WHERE id=%s', tree_id)
+    cursor.execute('SELECT * FROM treesData.trees WHERE id=%f', tree_id)
     result = cursor.fetchall()
     return render_template('view.html', title='View Form', trees=result[0])
 
@@ -36,7 +36,7 @@ def record_view(tree_id):
 @app.route('/edit/<int:tree_id>', methods=['GET'])
 def form_edit_get(tree_id):
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM treesData.trees WHERE id=%s', tree_id)
+    cursor.execute('SELECT * FROM treesData.trees WHERE treeNum=%f', tree_id)
     result = cursor.fetchall()
     return render_template('edit.html', title='Edit Form', trees=result[0])
 
@@ -44,11 +44,10 @@ def form_edit_get(tree_id):
 @app.route('/edit/<int:tree_id>', methods=['POST'])
 def form_update_post(tree_id):
     cursor = mysql.get_db().cursor()
-    inputData = (request.form.get('fldName'), request.form.get('fldLat'), request.form.get('fldLong'),
-                 request.form.get('fldCountry'), request.form.get('fldAbbreviation'),
-                 request.form.get('fldCapitalStatus'), request.form.get('fldPopulation'), tree_id)
-    sql_update_query = """UPDATE trees t SET t.treeNum = %s, t.Girth_in = %s, t.Height_ft = %s, t.Volume_ft_3 = 
-    %s WHERE t.treeNum = %s """
+    inputData = (request.form.get('treeNum'), request.form.get('Girth_in'), request.form.get('Height_ft'),
+                 request.form.get('Volume_ft_3'), tree_id)
+    sql_update_query = """UPDATE treesData.trees t SET t.treeNum = %s, t.Girth = %f, t.height = %f, t.volume = 
+    %f WHERE t.treeNum = %f """
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
@@ -62,9 +61,9 @@ def form_insert_get():
 @app.route('/trees/new', methods=['POST'])
 def form_insert_post():
     cursor = mysql.get_db().cursor()
-    inputData = (request.form.get('Tree Number'), request.form.get('Girth (in)'), request.form.get('Height (ft)'),
-                 request.form.get('Volume (Cubic Feet)'))
-    sql_insert_query = """INSERT INTO trees (treeNum,Girth_in,Height_ft,Volume_ft_3,) VALUES (%s,%s,%s,%s)"""
+    inputData = (request.form.get('treeNum'), request.form.get('Girth_in'), request.form.get('Height_ft'),
+                 request.form.get('Volume_ft_3'))
+    sql_insert_query = """INSERT INTO trees (treeNum,girth,height,volume) VALUES (%f,%f,%f,%f)"""
     cursor.execute(sql_insert_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
@@ -73,7 +72,7 @@ def form_insert_post():
 @app.route('/delete/<int:tree_id>', methods=['POST'])
 def form_delete_post(tree_id):
     cursor = mysql.get_db().cursor()
-    sql_delete_query = """DELETE FROM trees WHERE id = %s """
+    sql_delete_query = """DELETE FROM trees WHERE id = %f """
     cursor.execute(sql_delete_query, tree_id)
     mysql.get_db().commit()
     return redirect("/", code=302)
@@ -92,9 +91,9 @@ def api_browse() -> str:
 @app.route('/api/v1/trees/<int:tree_id>', methods=['GET'])
 def api_retrieve(tree_id) -> str:
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM trees WHERE id=%s', tree_id)
+    cursor.execute('SELECT * FROM trees WHERE treeNum=%f', tree_id)
     result = cursor.fetchall()
-    json_result = json.dumps(result);
+    json_result = json.dumps(result)
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 

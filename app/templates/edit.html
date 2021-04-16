@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="/edit/{{tree.id}}" method="post">
+    <div class="row">
+        <div class="col">
+            <label for="treeNum">Tree Number</label>
+            <input id="treeNum" type="text" class="form-control" placeholder="Tree Number" name="treeNumber" value="{{trees.treeNum}}">
+        </div>
+        <div class="col">
+            <label for="Girth_in">Girth (Inches)</label>
+            <input id="Girth_in" type="text" class="form-control" placeholder="Girth (Inches)"
+                   name="girth" value="{{trees.Girth_in}}">
+        </div>
+        <div class="col">
+            <label for="Height_ft">Height (Feet)</label>
+            <input id="Height_ft" type="text" class="form-control" placeholder="Height (Feet)" name="Height_ft" value="{{trees.Height_ft}}">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label for="Volume_ft_3">Volume (Feet^3)</label>
+            <input id="Volume_ft_3" type="text" class="form-control" placeholder="City Latitude" name="Volume_ft_3" value="{{trees.Volume_ft_3}}">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+
+</form>
+{% endblock %}

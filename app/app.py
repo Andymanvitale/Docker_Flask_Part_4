@@ -46,7 +46,7 @@ def form_update_post(tree_id):
     cursor = mysql.get_db().cursor()
     inputData = (request.form.get('treeNum'), request.form.get('girth'), request.form.get('height'),
                  request.form.get('volume'), tree_id)
-    sql_update_query = """UPDATE treesData.trees t SET t.treeNum = %s, t.Girth = %s, t.height = %s, t.volume = 
+    sql_update_query = """UPDATE treesData.trees t SET t.treeNum = %s, t.girth = %s, t.height = %s, t.volume = 
     %s WHERE t.id = %s """
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()

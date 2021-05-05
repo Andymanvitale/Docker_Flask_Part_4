@@ -96,11 +96,12 @@ def api_retrieve(tree_id) -> str:
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
+
 @app.route('/api/v1/trees/<int:tree_id>', methods=['PUT'])
 def api_edit(tree_id) -> str:
     cursor = mysql.get_db().cursor()
     content = request.json
-    inputData = (content['treeNum'], content['girth'], content['height'], content['volume'], id)
+    inputData = (content['treeNum'], content['girth'], content['height'], content['volume'], tree_id)
     sql_update_query = """UPDATE trees t SET t.treeNum = %s, t.girth = %s, t.height = %s, t.volume = %s WHERE t.id = %s """
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
@@ -110,7 +111,6 @@ def api_edit(tree_id) -> str:
 
 @app.route('/api/v1/trees', methods=['POST'])
 def api_add() -> str:
-
     content = request.json
 
     cursor = mysql.get_db().cursor()
@@ -122,13 +122,13 @@ def api_add() -> str:
     return resp
 
 
-@app.route('/api/trees/<int:tree_id>', methods=['DELETE'])
+@app.route('/api/v1/trees/<int:tree_id>', methods=['DELETE'])
 def api_delete(tree_id) -> str:
     cursor = mysql.get_db().cursor()
-    sql_delete_query = """DELETE FROM trees WHERE id = %s"""
+    sql_delete_query = """DELETE FROM trees WHERE id = %s """
     cursor.execute(sql_delete_query, tree_id)
     mysql.get_db().commit()
-    resp = Response(status=210, mimetype='application/json')
+    resp = Response(status=200, mimetype='application/json')
     return resp
 
 

@@ -1,4 +1,3 @@
-from typing import List, Dict
 import simplejson as json
 from flask import Flask, request, Response, redirect
 from flask import render_template
@@ -83,7 +82,7 @@ def api_browse() -> str:
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM trees')
     result = cursor.fetchall()
-    json_result = json.dumps(result);
+    json_result = json.dumps(result)
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
@@ -97,21 +96,38 @@ def api_retrieve(tree_id) -> str:
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
-
-@app.route('/api/v1/trees/', methods=['POST'])
-def api_add() -> str:
+@app.route('/api/v1/trees/<int:tree_id>', methods=['PUT'])
+def api_edit(tree_id) -> str:
+    cursor = mysql.get_db().cursor()
+    content = request.json
+    inputData = (content['treeNum'], content['girth'], content['height'], content['volume'], id)
+    sql_update_query = """UPDATE trees t SET t.treeNum = %s, t.girth = %s, t.height = %s, t.volume = %s WHERE t.id = %s """
+    cursor.execute(sql_update_query, inputData)
+    mysql.get_db().commit()
     resp = Response(status=201, mimetype='application/json')
     return resp
 
 
-@app.route('/api/v1/trees/<int:tree_id>', methods=['PUT'])
-def api_edit(tree_id) -> str:
+@app.route('/api/v1/trees', methods=['POST'])
+def api_add() -> str:
+
+    content = request.json
+
+    cursor = mysql.get_db().cursor()
+    inputData = (content['treeNum'], content['girth'], content['height'], request.form.get('volume'))
+    sql_insert_query = """INSERT INTO trees (treeNum,girth,height,volume) VALUES (%s, %s, %s, %s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
     resp = Response(status=201, mimetype='application/json')
     return resp
 
 
 @app.route('/api/trees/<int:tree_id>', methods=['DELETE'])
 def api_delete(tree_id) -> str:
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM trees WHERE id = %s"""
+    cursor.execute(sql_delete_query, tree_id)
+    mysql.get_db().commit()
     resp = Response(status=210, mimetype='application/json')
     return resp
 
